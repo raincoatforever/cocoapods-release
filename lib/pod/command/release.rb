@@ -21,6 +21,7 @@ module Pod
           ['--carthage', 'Validates project for carthage deployment'],
           ['--reverse', 'Validates and pushes podspecs in reverse order'],
           ['--verbose', 'Show more debugging information'],
+          ['--use-modular-headers', 'allow enabling modular headers for static libraries']
         ].concat(super.reject { |option, _| option == '--silent' })
       end
 
@@ -33,6 +34,7 @@ module Pod
         @verbose = argv.flag?('verbose') ? "--verbose" : ""
         @use_libraries = argv.flag?('use-libraries') ? "--use-libraries" : ""
         @skip_lint = argv.flag?('skip-lint')
+        @use_modular_headers = argv.flag?('use-modular-headers') ? "--use-modular-headers": ""
         super
       end
 
@@ -96,7 +98,7 @@ module Pod
 
           if !@skip_lint
             # verify lib
-            execute "pod lib lint #{spec} #{@use_libraries} #{@allow_warnings} --sources=#{available_sources.join(',')}"
+            execute "pod lib lint #{spec} #{@use_libraries} #{@allow_warnings} #{@use_modular_headers} --sources=#{available_sources.join(',')}"
           end
 
           if @carthage
@@ -115,9 +117,9 @@ module Pod
 
           repo = @repo || pushed_sources.first
           if repo == "master"
-            execute "pod trunk push #{spec} #{@allow_warnings}"
+            execute "pod trunk push #{spec} #{@allow_warnings} #{@use_modular_headers}"
           else
-            execute "pod repo push #{repo} #{spec} #{@allow_warnings}"
+            execute "pod repo push #{repo} #{spec} #{@allow_warnings} #{@use_modular_headers}"
           end
 
           if @carthage && `git remote show origin`.include?("github.com")
