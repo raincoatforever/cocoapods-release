@@ -106,7 +106,7 @@ module Pod
           # Create git tag for current version
           puts "#{"==>".magenta} Tagging repository with version #{"#{version}".green}"
 
-          unless system("git tag | grep #{version} > /dev/null")
+          unless system("git tag | grep -x #{version} > /dev/null")
             execute "git pull"
             execute "git add -A && git commit -m \"Release #{version}\"", :optional => true
             execute "git tag #{version} -f"
