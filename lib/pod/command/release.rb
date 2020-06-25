@@ -110,7 +110,6 @@ module Pod
 
           unless system("git tag | grep -x #{version} > /dev/null")
             execute "git pull"
-            execute "git add -A && git commit -m \"Release #{version}\"", :optional => true
             execute "git tag #{version} -f"
             execute "git push && git push --tags"
           end
