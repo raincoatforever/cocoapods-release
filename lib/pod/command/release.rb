@@ -116,9 +116,9 @@ module Pod
 
           repo = @repo || pushed_sources.first
           if repo == "master"
-            execute "pod trunk push #{spec} #{@allow_warnings} #{@use_modular_headers}"
+            execute "pod trunk push #{spec} #{@allow_warnings} #{@use_modular_headers} --verbose"
           else
-            execute "pod repo push #{repo} #{spec} #{@allow_warnings} #{@use_modular_headers}"
+            execute "pod repo push #{repo} #{spec} #{@allow_warnings} #{@use_modular_headers} --verbose"
           end
 
           if @carthage && `git remote show origin`.include?("github.com")
